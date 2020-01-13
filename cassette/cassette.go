@@ -190,6 +190,11 @@ func (c *Cassette) Save() error {
 		return nil
 	}
 
+	if os.Getenv("CODEBUILD_INITIATOR") != "" {
+		// Save all new files in a CodeBuild to test target dir so they can be retrieved for future use
+		c.File = "target/test/" + c.File
+	}
+
 	// Create directory for cassette if missing
 	cassetteDir := filepath.Dir(c.File)
 	if _, err := os.Stat(cassetteDir); os.IsNotExist(err) {
